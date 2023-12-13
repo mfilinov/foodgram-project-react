@@ -2,7 +2,7 @@ name: Main Foodgram Workflow
 on:
   push:
     branches:
-      - main
+      - master
 jobs:
   tests:
     runs-on: ubuntu-latest
