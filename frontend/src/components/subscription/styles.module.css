@@ -7,6 +7,7 @@
   max-width: 363px;
   width: 100%;
   text-align: left;
+  box-shadow: 0 16px 24px rgba(0, 0, 0, 0.05);
 }
 
 .subscriptionHeader {

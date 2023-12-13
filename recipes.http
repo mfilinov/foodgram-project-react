@@ -1,0 +1,174 @@
+#### Пользователи
+### Registration user
+POST {{baseUrl}}/api/users/
+Content-Type: application/json
+
+{
+    "email": "test@ya.ru",
+    "username": "test",
+    "first_name": "Test",
+    "last_name": "Test",
+    "password": "Qwerty123"
+}
+
+### Получить токен авторизации test@yandex.ru
+POST {{baseUrl}}/api/auth/token/login/
+Content-Type: application/json
+
+{
+    "email": "test@ya.ru",
+    "password": "Qwerty123"
+}
+
+### Получить токен авторизации vpupkin@yandex.ru
+POST {{baseUrl}}/api/auth/token/login/
+Content-Type: application/json
+
+{
+    "email": "ya@ya.ru",
+    "password": "bgq6wdvxrFXg-!f"
+}
+
+### Удаление токена
+POST {{baseUrl}}/api/auth/token/logout/
+Content-Type: application/json
+Authorization: Token {{auth_token}}
+
+### Список пользователей
+#GET {{baseUrl}}/api/users/?limit=2
+GET {{diplomaUrl}}/api/users/
+#Authorization: Token {{auth_token}}
+
+
+### Профиль пользователя
+GET {{baseUrl}}/api/users/1/
+#Authorization: Token {{auth_token}}
+
+### Me
+GET {{baseUrl}}/api/users/me/
+#Authorization: Token {{auth_token}}
+
+### Change Password
+POST {{baseUrl}}/api/users/set_password/
+Content-Type: application/json
+Authorization: Token {{auth_token}}
+
+{
+"new_password": "bgq6wdvxrFXg-!f",
+"current_password": "Qwerty123"
+}
+
+
+#### Подписки
+### Список подписчиков
+GET {{baseUrl}}/api/users/subscriptions/
+Authorization: Token {{auth_token}}
+
+### Подписаться на пользователя
+POST {{baseUrl}}/api/users/4/subscribe/
+Authorization: Token {{auth_token}}
+
+### Отписаться от пользователя
+DELETE {{baseUrl}}/api/users/4/subscribe/
+Authorization: Token {{auth_token}}
+
+
+#### Тэги
+### Cписок тегов
+GET {{baseUrl}}/api/tags/
+
+### Получение тега
+GET {{baseUrl}}/api/tags/2/
+
+#### Ингредиенты
+### Список ингредиентов
+GET {{baseUrl}}/api/ingredients/?name=цу
+#GET {{baseUrl}}/api/ingredients/
+
+### Получение ингредиента
+GET {{baseUrl}}/api/ingredients/2/
+
+#### Рецепты
+### Список рецептов
+#GET {{baseUrl}}/api/recipes/?limit=6&tags=black&tags=white
+#GET {{baseUrl}}/api/recipes/?limit=1&tags=grey&author=2
+GET {{diplomaUrl}}/api/recipes/
+#Authorization: Token {{auth_token}}
+
+### Получение рецепта
+GET {{baseUrl}}/api/recipes/23/
+Authorization: Token {{auth_token}}
+
+### Удаление рецепта
+DELETE {{baseUrl}}/api/recipes/43/
+Authorization: Token {{auth_token}}
+
+### Создание рецепта
+POST {{baseUrl}}/api/recipes/
+Content-Type: application/json
+Authorization: Token {{auth_token}}
+
+{
+    "ingredients": [
+        {
+            "id": 1,
+            "amount": 10
+        },
+        {
+            "id": 2,
+            "amount": 20
+        }
+    ],
+    "tags": [
+        1,
+        2
+    ],
+    "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
+    "name": "Нечто съедобное (это не точно)",
+    "text": "Приготовьте как нибудь эти ингредиеты",
+    "cooking_time": 5
+}
+
+
+### Редактирование рецепта
+PATCH {{baseUrl}}/api/recipes/3/
+Content-Type: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "ingredients": [
+    {
+      "id": 9999,
+      "amount": 10
+    }
+  ],
+  "tags": [
+    1,
+    2
+  ],
+  "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
+  "name": "API Recipe",
+  "text": "API Recipe text",
+  "cooking_time": 2
+}
+
+#### Избранное
+POST {{baseUrl}}/api/recipes/1/favorite/
+Authorization: Token {{auth_token}}
+
+### Удалить рецепт из избранного
+DELETE {{baseUrl}}/api/recipes/1/favorite/
+Authorization: Token {{auth_token}}
+
+
+#### Список покупок
+GET {{baseUrl}}/api/recipes/download_shopping_cart/
+Authorization: Token {{auth_token}}
+
+### Добавить рецепт в список покупок
+POST {{baseUrl}}/api/recipes/3/shopping_cart/
+Authorization: Token {{auth_token}}
+
+### Удалить рецепт из списка покупок
+DELETE {{baseUrl}}/api/recipes/3/shopping_cart/
+Authorization: Token {{auth_token}}

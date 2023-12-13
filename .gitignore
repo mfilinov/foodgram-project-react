@@ -130,3 +130,9 @@ dmypy.json
 
 # .idea
 .idea
+*.http
+
+# static media
+backend/media
+frontend/node_modules
+

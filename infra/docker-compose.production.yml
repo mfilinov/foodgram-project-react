@@ -1,4 +1,4 @@
-version: '3.3'
+version: "3.3"
 
 volumes:
   pg-diploma:
@@ -16,6 +16,7 @@ services:
     env_file: .env
   backend:
     container_name: backend
+    image: mfilinov/kittygram_backend
     build:
       context: ../backend
       dockerfile: Dockerfile
@@ -27,6 +28,8 @@ services:
       - "static-diploma-backend:/app/static"
       - "media-diploma-backend:/app/media"
   frontend:
+    container_name: frontend
+    image: mfilinov/kittygram_frontend
     build:
       context: ../frontend
       dockerfile: Dockerfile
@@ -36,14 +39,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: gateway
     restart: always
+    image: mfilinov/kittygram_gateway
     environment:
       TZ: "Europe/Moscow"
     depends_on:
       - db
       - backend
       - frontend
-    container_name: gateway
     ports:
       - "127.0.0.1:8080:80"
     volumes:
