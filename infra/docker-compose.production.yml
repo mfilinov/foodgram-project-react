@@ -16,7 +16,7 @@ services:
     env_file: .env
   backend:
     container_name: backend
-    image: mfilinov/kittygram_backend
+    image: mfilinov/foodgram_backend
     build:
       context: ../backend
       dockerfile: Dockerfile
@@ -29,7 +29,7 @@ services:
       - "media-diploma-backend:/app/media"
   frontend:
     container_name: frontend
-    image: mfilinov/kittygram_frontend
+    image: mfilinov/foodgram_frontend
     build:
       context: ../frontend
       dockerfile: Dockerfile
@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile
     container_name: gateway
     restart: always
-    image: mfilinov/kittygram_gateway
+    image: mfilinov/foodgram_gateway
     environment:
       TZ: "Europe/Moscow"
     depends_on:
