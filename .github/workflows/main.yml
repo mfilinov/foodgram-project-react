@@ -110,7 +110,7 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
-        source: "./infra/docker-compose.production.yml"
+        source: "infra/docker-compose.production.yml"
         target: "~/foodgram"
         strip_components: 1
     - name: create-envfile
