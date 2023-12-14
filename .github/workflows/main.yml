@@ -111,7 +111,7 @@ jobs:
         username: ${{ secrets.USER }}
         key: ${{ secrets.SSH_KEY }}
         source: "./infra/docker-compose.production.yml"
-        target: "foodgram"
+        target: "~/foodgram/docker-compose.production.yml"
     - name: create-envfile
       uses: cuchi/jinja2-action@v1.2.0
       with:
