@@ -2,22 +2,37 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
+from recipes.constants import (
+    TAG_NAME_MAX_LENGTH,
+    TAG_SLUG_MAX_LENGTH,
+    TAG_COLOR_MAX_LENGTH,
+    INGREDIENT_NAME_MAX_LENGTH,
+    INGREDIENT_MEASUREMENT_UNIT_MAX_LENGTH,
+    RECIPE_NAME_MAX_LENGTH,
+    RECIPE_TEXT_MAX_LENGTH,
+    RECIPE_C_T_MIN_VALUE,
+    RECIPE_C_T_MAX_VALUE,
+    RECIPE_INGREDIENT_AMOUNT_MIN_VALUE,
+    RECIPE_INGREDIENT_AMOUNT_MAX_VALUE)
 from recipes.validators import validate_color
 
 User = get_user_model()
 
 
 class Tag(models.Model):
-    name = models.CharField('Название', max_length=200, unique=True)
-    color = models.CharField('Цвет в HEX', max_length=7, unique=True,
-                             validators=[validate_color])
-    slug = models.SlugField('Уникальный слаг', max_length=200,
-                            unique=True)
+    name = models.CharField(
+        'Название', max_length=TAG_NAME_MAX_LENGTH, unique=True)
+    color = models.CharField(
+        'Цвет в HEX', max_length=TAG_COLOR_MAX_LENGTH,
+        unique=True, validators=[validate_color])
+    slug = models.SlugField(
+        'Уникальный слаг', max_length=TAG_SLUG_MAX_LENGTH,
+        unique=True)
 
     class Meta:
         verbose_name = 'Тэг'
         verbose_name_plural = 'Тэги'
-        ordering = ['name']
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
@@ -25,27 +40,31 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(
-        'Название', max_length=200, db_index=True)
-    measurement_unit = models.CharField('Единица измерения',
-                                        max_length=200)
+        'Название', max_length=INGREDIENT_NAME_MAX_LENGTH, db_index=True)
+    measurement_unit = models.CharField(
+        'Единица измерения',
+        max_length=INGREDIENT_MEASUREMENT_UNIT_MAX_LENGTH)
 
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
-        ordering = ['name']
+        ordering = ('name',)
 
     def __str__(self):
         return self.name
 
 
 class Recipe(models.Model):
-    name = models.CharField('Название', max_length=200)
-    text = models.TextField('Текстовое описание', max_length=1000)
+    name = models.CharField('Название',
+                            max_length=RECIPE_NAME_MAX_LENGTH)
+    text = models.TextField('Текстовое описание',
+                            max_length=RECIPE_TEXT_MAX_LENGTH)
     image = models.ImageField('Изображение',
                               upload_to='recipe_images')
     cooking_time = models.PositiveIntegerField(
         'Время приготовления в минутах',
-        validators=[MinValueValidator(1), MaxValueValidator(999)])
+        validators=[MinValueValidator(RECIPE_C_T_MIN_VALUE),
+                    MaxValueValidator(RECIPE_C_T_MAX_VALUE)])
     author = models.ForeignKey(
         User, on_delete=models.CASCADE,
         related_name='recipe')
@@ -63,7 +82,7 @@ class Recipe(models.Model):
     class Meta:
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
-        ordering = ['-pub_date']
+        ordering = ('-pub_date',)
 
     def __str__(self):
         return self.name
@@ -78,7 +97,8 @@ class RecipeIngredient(models.Model):
         related_name='recipe_amount')
     amount = models.PositiveIntegerField(
         'Количество в рецепте',
-        validators=[MinValueValidator(1), MaxValueValidator(1000)])
+        validators=[MinValueValidator(RECIPE_INGREDIENT_AMOUNT_MIN_VALUE),
+                    MaxValueValidator(RECIPE_INGREDIENT_AMOUNT_MAX_VALUE)])
 
     class Meta:
         verbose_name = 'Ингредиент'
@@ -89,6 +109,9 @@ class RecipeIngredient(models.Model):
                 name='unique_recipe_ingredient'
             )
         ]
+
+    def __str__(self):
+        return f'{self.recipe.name} - {self.ingredient} - {self.amount}'
 
 
 class Favorite(models.Model):
@@ -107,6 +130,9 @@ class Favorite(models.Model):
             )
         ]
 
+    def __str__(self):
+        return f'{self.recipe} - {self.user}'
+
 
 class Cart(models.Model):
     user = models.ForeignKey(
@@ -123,3 +149,6 @@ class Cart(models.Model):
                 name='unique_recipe_user_cart'
             )
         ]
+
+    def __str__(self):
+        return f'{self.recipe} - {self.user}'

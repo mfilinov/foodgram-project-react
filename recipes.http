@@ -17,7 +17,7 @@ Content-Type: application/json
 
 {
     "email": "test@ya.ru",
-    "password": "Qwerty123"
+    "password": "bgq6wdvxrFXg-!f"
 }
 
 ### Получить токен авторизации vpupkin@yandex.ru
@@ -46,7 +46,7 @@ GET {{baseUrl}}/api/users/1/
 
 ### Me
 GET {{baseUrl}}/api/users/me/
-#Authorization: Token {{auth_token}}
+Authorization: Token {{auth_token}}
 
 ### Change Password
 POST {{baseUrl}}/api/users/set_password/
@@ -69,7 +69,7 @@ POST {{baseUrl}}/api/users/4/subscribe/
 Authorization: Token {{auth_token}}
 
 ### Отписаться от пользователя
-DELETE {{baseUrl}}/api/users/4/subscribe/
+DELETE {{baseUrl}}/api/users/3/subscribe/
 Authorization: Token {{auth_token}}
 
 
@@ -92,7 +92,7 @@ GET {{baseUrl}}/api/ingredients/2/
 ### Список рецептов
 #GET {{baseUrl}}/api/recipes/?limit=6&tags=black&tags=white
 #GET {{baseUrl}}/api/recipes/?limit=1&tags=grey&author=2
-GET {{diplomaUrl}}/api/recipes/
+GET {{baseUrl}}/api/recipes/
 #Authorization: Token {{auth_token}}
 
 ### Получение рецепта
@@ -153,7 +153,7 @@ Authorization: Token {{auth_token}}
 }
 
 #### Избранное
-POST {{baseUrl}}/api/recipes/1/favorite/
+POST {{baseUrl}}/api/recipes/100/favorite/
 Authorization: Token {{auth_token}}
 
 ### Удалить рецепт из избранного
@@ -170,5 +170,5 @@ POST {{baseUrl}}/api/recipes/3/shopping_cart/
 Authorization: Token {{auth_token}}
 
 ### Удалить рецепт из списка покупок
-DELETE {{baseUrl}}/api/recipes/3/shopping_cart/
+DELETE {{baseUrl}}/api/recipes/30/shopping_cart/
 Authorization: Token {{auth_token}}

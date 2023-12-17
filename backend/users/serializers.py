@@ -1,33 +1,24 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.validators import UnicodeUsernameValidator
 from djoser.serializers import UserCreateMixin
 from rest_framework import serializers
 
 from recipes.models import Recipe
+from users.constants import USER_PASSWORD_MAX_LENGTH
+from users.models import Subscribe
 
 User = get_user_model()
-username_validator = UnicodeUsernameValidator()
-
-
-def validate_username_include_me(value):
-    if value == 'me':
-        raise serializers.ValidationError(
-            "Использовать имя 'me' в качестве username запрещено")
-    return value
 
 
 class UserCreateSerializer(UserCreateMixin, serializers.ModelSerializer):
     password = serializers.CharField(style={"input_type": "password"},
-                                     write_only=True, max_length=150)
+                                     write_only=True,
+                                     max_length=USER_PASSWORD_MAX_LENGTH)
 
     class Meta:
         model = User
         fields = (
             'email', 'id', 'username', 'first_name', 'last_name', 'password')
         read_only_fields = ('id',)
-
-    def validate_username(self, value):
-        return validate_username_include_me(value)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -73,6 +64,19 @@ class UserWithRecipesSerializer(UserSerializer):
 
     def get_recipes_count(self, obj):
         return obj.recipe.all().count()
+
+    def validate(self, data):
+        user = self.context['request'].user
+        sub_candidate = self.instance
+        if user == sub_candidate:
+            raise serializers.ValidationError(
+                {'errors': 'пользователь не может быть подписан сам на себя'})
+
+        if user.subscriber.filter(subscribing_id=sub_candidate.id).exists():
+            raise serializers.ValidationError(
+                {"errors": "пользователь уже подписан"})
+
+        return data
 
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.fields + ('recipes', 'recipes_count')
