@@ -4,7 +4,6 @@ from rest_framework import serializers
 
 from recipes.models import Recipe
 from users.constants import USER_PASSWORD_MAX_LENGTH
-from users.models import Subscribe
 
 User = get_user_model()
 
